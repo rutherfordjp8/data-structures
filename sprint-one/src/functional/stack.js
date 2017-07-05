@@ -10,9 +10,12 @@ var Stack = function() {
   };
 
   someInstance.pop = function() {
-    var temp = storage[someInstance.size() - 1];
-    delete storage[someInstance.size() - 1];
-    return temp;
+    if (someInstance.size() > 0) {
+      var temp = storage[someInstance.size() - 1];
+      delete storage[someInstance.size() - 1];
+      return temp;
+    }
+    console.log('Cannot pop an empty stack');
   };
 
   someInstance.size = function() {

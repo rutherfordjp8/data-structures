@@ -23,7 +23,6 @@ var Queue = function() {
       }
     }
     
-    
     return temp;
   };
 

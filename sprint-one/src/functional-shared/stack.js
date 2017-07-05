@@ -16,9 +16,12 @@ var stackMethods = {
   },
 
   pop: function() {
-    var temp = this.storage[(this.size() - 1).toString()];
-    delete this.storage[(this.size() - 1).toString()];
-    return temp;
+    if (this.size() > 0) {
+      var temp = this.storage[(this.size() - 1).toString()];
+      delete this.storage[(this.size() - 1).toString()];
+      return temp;
+    }
+    console.log('Cannot pop an empty Stack');
   },
 
   size: function() {
