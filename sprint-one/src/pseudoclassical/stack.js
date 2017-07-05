@@ -9,9 +9,12 @@ Stack.prototype.push = function(value) {
 };
 
 Stack.prototype.pop = function() {
-  var temp = this.storage[this.size() - 1];
-  delete this.storage[this.size() - 1];
-  return temp;
+  if (this.size() > 0) {
+    var temp = this.storage[this.size() - 1];
+    delete this.storage[this.size() - 1];
+    return temp;
+  }
+  console.log('Cannot pop an empty Stack');
 };
 
 Stack.prototype.size = function() {
