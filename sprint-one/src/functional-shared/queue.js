@@ -21,11 +21,14 @@ var queueMethods = {
     var temp = this.storage['0'];
     delete this.storage['0'];
       
-    var counter = 0;
-    for (var key in this.storage) {
-      this.storage[counter.toString()] = this.storage[(counter + 1).toString()];
-      delete this.storage[(counter + 1).toString()];
+    if (this.size() > 0) {
+      var counter = 0;
+      for (var key in this.storage) {
+        this.storage[counter.toString()] = this.storage[(counter + 1).toString()];
+        delete this.storage[(counter + 1).toString()];
+      }
     }
+    
     return temp;
   },
     

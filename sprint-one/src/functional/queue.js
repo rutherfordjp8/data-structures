@@ -14,12 +14,15 @@ var Queue = function() {
     var temp = storage['0'];
     delete storage['0'];
 
-    var counter = 0;
-    for (var key in storage) {
-      storage[(counter).toString()] = storage[(counter + 1).toString()];
-      delete storage[(counter + 1).toString()];
-      counter++;
+    if (someInstance.size() > 0) {
+      var counter = 0;
+      for (var key in storage) {
+        storage[(counter).toString()] = storage[(counter + 1).toString()];
+        delete storage[(counter + 1).toString()];
+        counter++;
+      }
     }
+    
     
     return temp;
   };
