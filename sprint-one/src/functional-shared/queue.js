@@ -18,10 +18,11 @@ var queueMethods = {
     delete this.storage['0'];
       
     if (this.size() > 0) {
-      var counter = 0;
+      var index = 0;
       for (var key in this.storage) {
-        this.storage[counter.toString()] = this.storage[(counter + 1).toString()];
-        delete this.storage[(counter + 1).toString()];
+        this.storage[index.toString()] = this.storage[(index + 1).toString()];
+        delete this.storage[(index + 1).toString()];
+        index++;
       }
     }
     
