@@ -1,6 +1,6 @@
 var Set = function() {
   var set = Object.create(setPrototype);
-  set._storage = null; // fix me
+  set.storage = [];
   return set;
 };
 
