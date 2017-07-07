@@ -22,7 +22,7 @@ HashTable.prototype.insert = function(k, v) {
   } else {
     //if array "pairs" already exist
     //if key exists in pairs
-    var ind = containsKey(this._storage.get(index), k);
+    var ind = indexOfKey(this._storage.get(index), k);
     if (ind !== -1) {
       //override the value in the key/value pair in array "pairs"
       this._storage.get(index)[ind][1] = v;
@@ -35,13 +35,46 @@ HashTable.prototype.insert = function(k, v) {
 
 HashTable.prototype.retrieve = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
+  //returns the value stored at the key(k)
+  //create variable, pairs, that represents pairs array at index
+  var pairs = this._storage.get(index);
+  //if an array of pairs does exist at index and is not empty
+  if (Array.isArray(pairs) && pairs.length > 0) {
+    //create variable, key, that represents if/where key exists in pairs
+    var key = indexOfKey(pairs, k);
+    //if pairs indexOfKey
+    if (key !== -1) {
+      //return pairs[key][1]
+      return pairs[key][1];
+    }
+    return undefined;
+  } else {
+  //else return undefined
+    return undefined;
+  }
 };
 
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
+  //remove key value pair and shift the bucket array
+  
+  //create variable, pairs, that represents pairs array at index
+  var pairs = this._storage.get(index);
+  //if an array of pairs does exist at index and is not empty
+  if (Array.isArray(pairs) && pairs.length > 0) {
+    //create variable key that represents if/where key is in pairs
+    var key = indexOfKey(pairs, k);
+    //if pairs contains key
+    if (key !== -1) {
+      //reallocate elements in pairs 
+      pairs = pairs.slice(0, key).concat(pairs.slice(key + 1));
+      //set _.storage at index to the new pairs.
+      this._storage.set(index, pairs);
+    } 
+  }
 };
 
-var containsKey = function(collection, value) {
+var indexOfKey = function(collection, value) {
   if (collection.length === 0) {
     return -1;
   }
@@ -57,6 +90,9 @@ var containsKey = function(collection, value) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ * insert - O(1)
+ * retrieve - O(1)
+ * remove - O(1)
  */
 
 
