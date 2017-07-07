@@ -31,6 +31,13 @@ Graph.prototype.removeNode = function(node) {
   if (this.nodes.length === 0) {
     return -1;
   }
+    
+  for (var i = 0; i < this.nodes.length; i++) {
+    this.removeEdge(node, this.nodes[i]);
+    if (this.nodes[i] === node) {
+      this.nodes = this.nodes.slice(0, i).concat(this.nodes.slice(i + 1));
+    }   
+  }
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
@@ -60,14 +67,14 @@ Graph.prototype.addEdge = function(fromNode, toNode) {
 
 // Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromNode, toNode) {
-  if(this.edges.length === 0) {
+  if (this.edges.length === 0) {
     return -1;
   }
 
   for (var i = 0; i < this.edges.length; i++) {
     if ((this.edges[i][0] === fromNode && this.edges[i][1] === toNode) 
         || (this.edges[i][0] === toNode && this.edges[i][1] === fromNode)) {
-      this.edges = this.edges.slice(0,i).concat(this.edges.slice(i+1));
+      this.edges = this.edges.slice(0, i).concat(this.edges.slice(i + 1));
     }
 //  edges.slice(0,i) edges.slice(i+1)
   }
