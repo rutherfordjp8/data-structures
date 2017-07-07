@@ -5,7 +5,8 @@ var Tree = function(value) {
   // your code here
   newTree.children = [];  // fix me
 
-  newTree = _.extend(newTree, treeMethods);
+  newTree.addChild = treeMethods.addChild;
+  newTree.contains = treeMethods.contains;
 
   return newTree;
 };
@@ -17,6 +18,23 @@ treeMethods.addChild = function(value) {
 };
 
 treeMethods.contains = function(target) {
+  if (arguments[1] === undefined) {
+    return this.contains(target, this);
+  }
+
+  if (arguments[1].value === target) {
+    return true;
+  } else if (arguments[1].children.length === 0 && arguments[1].value !== target) {
+    return false;
+  } else {
+    for (var i = 0; i < arguments[1].children.length; i++) {
+      if (this.contains(target, arguments[1].children[i])) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 };
 
 
