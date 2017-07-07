@@ -24,6 +24,16 @@ setPrototype.contains = function(item) {
 };
 
 setPrototype.remove = function(item) {
+  if (this.storage.length === 0) {
+    return undefined;
+  }
+  
+  for (var i = 0; i < this.storage.length; i++) {
+    if (this.storage[i] === item) {
+      this.storage = this.storage.slice(0, i).concat(this.storage.slice(i + 1));
+      break;
+    }
+  }
 };
 
 /*
