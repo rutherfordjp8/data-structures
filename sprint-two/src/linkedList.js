@@ -33,6 +33,17 @@ var LinkedList = function() {
   };
 
   list.contains = function(target) {
+    if (arguments[1] === undefined) {
+      return list.contains(target, list.head.next);
+    }
+    
+    if (target === arguments[1].value) {
+      return true;
+    } else if (arguments[1].next === null && target !== arguments[1].value) {
+      return false;
+    } else {
+      return list.contains(target, arguments[1].next);
+    }
   };
 
   return list;
