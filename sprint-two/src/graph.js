@@ -33,7 +33,9 @@ Graph.prototype.removeNode = function(node) {
   }
     
   for (var i = 0; i < this.nodes.length; i++) {
+
     this.removeEdge(node, this.nodes[i]);
+
     if (this.nodes[i] === node) {
       this.nodes = this.nodes.slice(0, i).concat(this.nodes.slice(i + 1));
     }   
@@ -76,16 +78,29 @@ Graph.prototype.removeEdge = function(fromNode, toNode) {
         || (this.edges[i][0] === toNode && this.edges[i][1] === fromNode)) {
       this.edges = this.edges.slice(0, i).concat(this.edges.slice(i + 1));
     }
-//  edges.slice(0,i) edges.slice(i+1)
   }
 };
 
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
+  if (this.nodes.length === 0) {
+    return -1;
+  }
+
+  for (var i = 0; i < this.nodes.length; i++) {
+    cb(this.nodes[i]);  
+  }
 };
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ * addNode - O(1);
+ * contains - O(n);
+ * removeNode - Removing just the node is O(n), however it involves removing edges, so O(n*n) = O(n^2);
+ * hasEdge - O(n)
+ * addEdge - O(1)
+ * removeEdge - O(n)
+ * forEachNode - O(n)
  */
 
 
