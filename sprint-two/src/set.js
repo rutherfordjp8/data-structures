@@ -7,6 +7,11 @@ var Set = function() {
 var setPrototype = {};
 
 setPrototype.add = function(item) {
+  if (!this.contains(item)) {
+    this.storage.push(item);
+  } else {
+    console.log(item, 'Already exists in the set!');
+  }
 };
 
 setPrototype.contains = function(item) {
