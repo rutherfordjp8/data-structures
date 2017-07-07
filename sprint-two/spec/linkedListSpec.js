@@ -61,4 +61,15 @@ describe('linkedList', function() {
     linkedList.addToTail(8);
     expect(linkedList.contains(6)).to.equal(true);
   });
+
+  it('should return -1 when trying to remove a non-existent head', function() {
+    expect(linkedList.removeHead()).to.equal(-1);
+  });
+
+  it('should designate a new head when former head is removed', function() {
+    linkedList.addToTail(4);
+    linkedList.addToTail(5);
+    linkedList.removeHead();
+    expect(linkedList.head.value).to.equal(5);
+  });
 });

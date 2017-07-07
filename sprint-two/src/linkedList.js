@@ -21,7 +21,7 @@ var LinkedList = function() {
 
   list.removeHead = function() {
     if (list.head === null) {
-      return {};
+      return -1;
     } else {
       var temp = list.head.value;
       if (list.head.next.next !== null) {
