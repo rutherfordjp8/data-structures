@@ -12,6 +12,7 @@ HashTable.prototype.insert = function(k, v) {
   //push key value pairs into the array of pairs.
   //ADV: increase count everytime we add.
   this._count++;
+  var ratio = calculateRatio(this._count, this._limit);
   //if an array of pairs does not exist at index...
   if (!Array.isArray(this._storage.get(index))) {
     //create an array of pairs
@@ -25,10 +26,10 @@ HashTable.prototype.insert = function(k, v) {
     this._storage.set(index, pairs);
 
     //ADV: check ratio
-    if (calculateRatio(this._count, this._limit) > 0.75) {
+    if (ratio > 0.75) {
       //if ratio is > 0.75
         //rehash
-      this.reSize();
+      this.reSize(ratio);
     }
   } else {
     //if array "pairs" already exist
@@ -42,10 +43,10 @@ HashTable.prototype.insert = function(k, v) {
       //ADV: Add to count
       this._storage.get(index).push([k, v]);
       //ADV: check ratio
-      if (calculateRatio(this._count, this._limit) > 0.75) {
+      if (ratio > 0.75) {
         //if ratio is > 0.75
           //rehash
-        this.reSize();
+        this.reSize(ratio);
       }
     }
   }
@@ -106,10 +107,10 @@ var indexOfKey = function(collection, value) {
   return -1;
 };
 
-HashTable.prototype.reSize = function() {
+HashTable.prototype.reSize = function(ratio) {
   //create new hash table
   var newHashTable = new HashTable();
-  //make that hash tables ._limit twice as big as the old
+  //make that hash tables ._limit twice as big as the old or twice as small
   newHashTable._limit = this._limit * 2;
   newHashTable._storage = LimitedArray(newHashTable._limit);
   //go through every element of the old hashtable
@@ -125,6 +126,7 @@ HashTable.prototype.reSize = function() {
   //this (old hastable) equal to the new hash table
   this._storage = newHashTable._storage;
   this._limit = newHashTable._limit;
+  delete newHashTable;
 };
 
 var calculateRatio = function(count, limit) {
