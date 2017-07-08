@@ -4,21 +4,20 @@ var HashTable = function() {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
   this._count = 0;
-  this._ratio = this._count / this._limit;
 };
 
 HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   //create an array "pairs" for the posistion of the index in this.storage.
   //push key value pairs into the array of pairs.
-
+  //ADV: increase count everytime we add.
+  this._count++;
   //if an array of pairs does not exist at index...
   if (!Array.isArray(this._storage.get(index))) {
     //create an array of pairs
     var pairs = [];
 
-    //ADV: increase count everytime we add.
-    this._count++;
+
 
     //then push key value pairs into "pairs".
     pairs.push([k, v]);
@@ -26,11 +25,11 @@ HashTable.prototype.insert = function(k, v) {
     this._storage.set(index, pairs);
 
     //ADV: check ratio
-    if (this._ratio > 0.75) {
-
+    if (calculateRatio(this._count, this._limit) > 0.75) {
+      //if ratio is > 0.75
+        //rehash
+      this.reSize();
     }
-    //if ratio is > 0.75
-      //rehash
   } else {
     //if array "pairs" already exist
     //if key exists in pairs
@@ -43,8 +42,11 @@ HashTable.prototype.insert = function(k, v) {
       //ADV: Add to count
       this._storage.get(index).push([k, v]);
       //ADV: check ratio
-      //if ratio is > 0.75
-      //rehash
+      if (calculateRatio(this._count, this._limit) > 0.75) {
+        //if ratio is > 0.75
+          //rehash
+        this.reSize();
+      }
     }
   }
 };
@@ -109,12 +111,14 @@ HashTable.prototype.reSize = function() {
   var newHashTable = new HashTable();
   //make that hash tables ._limit twice as big as the old
   newHashTable._limit = this._limit * 2;
-
+  newHashTable._storage = LimitedArray(newHashTable._limit);
   //go through every element of the old hashtable
   this._storage.each(function(bucket){
     //insert element to new hashtable
-    for (var i = 0; i < bucket.length; i++) {
-      newHashTable.insert(bucket[i][0], bucket[i][1]);
+    if (bucket !== undefined) {
+      for (var i = 0; i < bucket.length; i++) {
+        newHashTable.insert(bucket[i][0], bucket[i][1]);
+      }
     }
   });
 
@@ -122,6 +126,10 @@ HashTable.prototype.reSize = function() {
   this._storage = newHashTable._storage;
   this._limit = newHashTable._limit;
 };
+
+var calculateRatio = function(count, limit) {
+  return count/limit;
+}
 /*
  * Complexity: What is the time complexity of the above functions?
  * insert - O(1)
