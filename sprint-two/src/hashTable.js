@@ -11,21 +11,25 @@ HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   //create an array "pairs" for the posistion of the index in this.storage.
   //push key value pairs into the array of pairs.
-  
+
   //if an array of pairs does not exist at index...
   if (!Array.isArray(this._storage.get(index))) {
     //create an array of pairs
     var pairs = [];
-    
+
     //ADV: increase count everytime we add.
-    
+    this._count++;
+
     //then push key value pairs into "pairs".
     pairs.push([k, v]);
     //insert this new array into the index
     this._storage.set(index, pairs);
-    
+
     //ADV: check ratio
-    //if ratio is > 0.75 
+    if (this._ratio > 0.75) {
+
+    }
+    //if ratio is > 0.75
       //rehash
   } else {
     //if array "pairs" already exist
@@ -39,8 +43,8 @@ HashTable.prototype.insert = function(k, v) {
       //ADV: Add to count
       this._storage.get(index).push([k, v]);
       //ADV: check ratio
-      //if ratio is > 0.75 
-      //rehash    
+      //if ratio is > 0.75
+      //rehash
     }
   }
 };
@@ -69,7 +73,7 @@ HashTable.prototype.retrieve = function(k) {
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   //remove key value pair and shift the bucket array
-  
+
   //create variable, pairs, that represents pairs array at index
   var pairs = this._storage.get(index);
   //if an array of pairs does exist at index and is not empty
@@ -78,11 +82,11 @@ HashTable.prototype.remove = function(k) {
     var key = indexOfKey(pairs, k);
     //if pairs contains key
     if (key !== -1) {
-      //reallocate elements in pairs 
+      //reallocate elements in pairs
       pairs = pairs.slice(0, key).concat(pairs.slice(key + 1));
       //set _.storage at index to the new pairs.
       this._storage.set(index, pairs);
-    } 
+    }
   }
 };
 
@@ -90,24 +94,33 @@ var indexOfKey = function(collection, value) {
   if (collection.length === 0) {
     return -1;
   }
-  
+
   for (var i = 0; i < collection.length; i++) {
     if (collection[i][0] === value) {
       return i;
     }
   }
-  
+
   return -1;
 };
 
-var reSize = function() {
+HashTable.prototype.reSize = function() {
   //create new hash table
+  var newHashTable = new HashTable();
   //make that hash tables ._limit twice as big as the old
-  
+  newHashTable._limit = this._limit * 2;
+
   //go through every element of the old hashtable
+  this._storage.each(function(bucket){
     //insert element to new hashtable
+    for (var i = 0; i < bucket.length; i++) {
+      newHashTable.insert(bucket[i][0], bucket[i][1]);
+    }
+  });
 
   //this (old hastable) equal to the new hash table
+  this._storage = newHashTable._storage;
+  this._limit = newHashTable._limit;
 };
 /*
  * Complexity: What is the time complexity of the above functions?
@@ -115,5 +128,3 @@ var reSize = function() {
  * retrieve - O(1)
  * remove - O(1)
  */
-
-
