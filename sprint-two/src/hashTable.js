@@ -17,9 +17,6 @@ HashTable.prototype.insert = function(k, v) {
   if (!Array.isArray(this._storage.get(index))) {
     //create an array of pairs
     var pairs = [];
-
-
-
     //then push key value pairs into "pairs".
     pairs.push([k, v]);
     //insert this new array into the index
@@ -87,7 +84,8 @@ HashTable.prototype.remove = function(k) {
     //if pairs contains key
     if (key !== -1) {
       //reallocate elements in pairs
-      pairs = pairs.slice(0, key).concat(pairs.slice(key + 1));
+      //pairs = pairs.slice(0, key).concat(pairs.slice(key + 1));
+      pairs.splice(key, 1);
       //set _.storage at index to the new pairs.
       this._storage.set(index, pairs);
     }
