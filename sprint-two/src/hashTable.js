@@ -76,11 +76,12 @@ HashTable.prototype.retrieve = function(k) {
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   //remove key value pair and shift the bucket array
-
   //create variable, pairs, that represents pairs array at index
+  var ratio = calculateRatio(this._count, this._limit);
   var pairs = this._storage.get(index);
   //if an array of pairs does exist at index and is not empty
   if (Array.isArray(pairs) && pairs.length > 0) {
+    this._count--;
     //create variable key that represents if/where key is in pairs
     var key = indexOfKey(pairs, k);
     //if pairs contains key
@@ -89,6 +90,10 @@ HashTable.prototype.remove = function(k) {
       pairs = pairs.slice(0, key).concat(pairs.slice(key + 1));
       //set _.storage at index to the new pairs.
       this._storage.set(index, pairs);
+    }
+
+    if (this._limit > 8 && ratio < 0.25) {
+      this.reSize(ratio);
     }
   }
 };
@@ -111,7 +116,11 @@ HashTable.prototype.reSize = function(ratio) {
   //create new hash table
   var newHashTable = new HashTable();
   //make that hash tables ._limit twice as big as the old or twice as small
-  newHashTable._limit = this._limit * 2;
+  if (ratio > 0.75) {
+    newHashTable._limit = this._limit * 2;
+  } else if (ratio < 0.25) {
+    newHashTable._limit = this._limit / 2;
+  }
   newHashTable._storage = LimitedArray(newHashTable._limit);
   //go through every element of the old hashtable
   this._storage.each(function(bucket){
@@ -122,11 +131,9 @@ HashTable.prototype.reSize = function(ratio) {
       }
     }
   });
-
   //this (old hastable) equal to the new hash table
   this._storage = newHashTable._storage;
   this._limit = newHashTable._limit;
-  delete newHashTable;
 };
 
 var calculateRatio = function(count, limit) {
