@@ -3,22 +3,30 @@
 var HashTable = function() {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
+  this._count = 0;
+  this._ratio = this._count / this._limit;
 };
 
 HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   //create an array "pairs" for the posistion of the index in this.storage.
   //push key value pairs into the array of pairs.
-
+  
   //if an array of pairs does not exist at index...
   if (!Array.isArray(this._storage.get(index))) {
     //create an array of pairs
     var pairs = [];
-    //create an array for key value pairs 
+    
+    //ADV: increase count everytime we add.
+    
     //then push key value pairs into "pairs".
     pairs.push([k, v]);
     //insert this new array into the index
     this._storage.set(index, pairs);
+    
+    //ADV: check ratio
+    //if ratio is > 0.75 
+      //rehash
   } else {
     //if array "pairs" already exist
     //if key exists in pairs
@@ -28,7 +36,11 @@ HashTable.prototype.insert = function(k, v) {
       this._storage.get(index)[ind][1] = v;
     } else {
       //else, push key/value pair to 'pairs'
-      this._storage.get(index).push([k, v]);    
+      //ADV: Add to count
+      this._storage.get(index).push([k, v]);
+      //ADV: check ratio
+      //if ratio is > 0.75 
+      //rehash    
     }
   }
 };
@@ -88,6 +100,15 @@ var indexOfKey = function(collection, value) {
   return -1;
 };
 
+var reSize = function() {
+  //create new hash table
+  //make that hash tables ._limit twice as big as the old
+  
+  //go through every element of the old hashtable
+    //insert element to new hashtable
+
+  //this (old hastable) equal to the new hash table
+};
 /*
  * Complexity: What is the time complexity of the above functions?
  * insert - O(1)
