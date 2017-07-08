@@ -33,6 +33,35 @@ BinarySearchTreeMethods.insert = function(value) {
     }
   }
 };
+
+BinarySearchTreeMethods.contains = function(value) {
+  if (value === this.value) {
+    return true;
+  } else if (value > this.value) {
+    if (this.right !== null) {
+      return this.right.contains(value);
+    }
+    return false;
+  } else {
+    if (this.left !== null) {
+      return this.left.contains(value);
+    }
+    return false;
+  }
+  
+};
+
+BinarySearchTreeMethods.depthFirstLog = function(callback) {
+  callback(this.value);
+
+  if (this.right !== null) {
+    this.right.depthFirstLog(callback);
+  } 
+
+  if (this.left !== null) {
+    this.left.depthFirstLog(callback);
+  }
+};
 /*
  * Complexity: What is the time complexity of the above functions?
  */
