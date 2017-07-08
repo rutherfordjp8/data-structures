@@ -57,6 +57,6 @@ setPrototype.remove = function(item) {
  * remove - O(1)
  *
  * Many thanks to Brian The Senior who explained the notion of using hashes
- * (objects) instead of arrays and application of them to this particular
+ * (objects) and application of them to this particular
  * problem.
  */
